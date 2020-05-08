@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "forGroupLearn": {
@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "forGroupLearn"
+    }
+  },
+  "defaultProject": "forGroupLearn",
+  "cli": {
+    "analytics": "9e683b58-1505-40a1-a762-28d2472857ab"
+  }
 }
