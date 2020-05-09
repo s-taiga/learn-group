@@ -9,6 +9,7 @@ import { RecogUnitStringService } from './recog-unit-string.service';
 })
 export class AppComponent {
   title = 'forGroupLearn';
+  displayedColumns = ['origin', 'affected'];
 
   constructor(public service: CalcChangeService,
               public recogUnit: RecogUnitStringService){

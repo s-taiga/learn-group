@@ -1,5 +1,7 @@
-<p>作用させる要素</p>
-<input type="text" #affect_unit (keyup.enter)="onEnter(affect_unit.value)">
+<mat-form-field >
+  <mat-label>作用させる要素</mat-label>
+  <input matInput #affect_unit (keyup.enter)="onEnter(affect_unit.value)">
+</mat-form-field>
 
 <div id="buttons">
   <mat-button-toggle-group #group="matButtonToggleGroup">
@@ -18,14 +20,16 @@
   </mat-button-toggle-group>
 </div>
 
-<table>
-  <tr>
-    <td>変換前</td>
-    <td>変換後</td>
-  </tr>
-  <tr id="each_row"
-    *ngFor="let each_row of this.service.all_list">
-    <td id="origin">{{each_row.origin | displayUnit}}</td>
-    <td id="affected">{{each_row.affected | displayUnit}}</td>
-  </tr>
-</table>
+<mat-table [dataSource]="service.all_list">
+  <ng-container matColumnDef="origin">
+    <mat-header-cell *matHeaderCellDef>変換前</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.origin | displayUnit}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="affected">
+    <mat-header-cell *matHeaderCellDef>変換後</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.affected | displayUnit}}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

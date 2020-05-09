@@ -5,10 +5,10 @@ import { ChangeUnit, ShowUnit } from './change.class'
   providedIn: 'root'
 })
 export class CalcChangeService {
-  // 変換対象のリスト（有限群）
-  public all_list: ShowUnit[];
   // 入れ替える文字数
   public size: number = 3;
+  // 変換対象のリスト（有限群）
+  public all_list: ShowUnit[] = [{origin: {size: this.size, pos: []}, affected: {size: this.size, pos: []}}];
   // 作用
   public g: ChangeUnit;
   // 作用する向き
