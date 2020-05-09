@@ -29,7 +29,6 @@ export class DisplayService implements MathService {
   }
 
   render(element: HTMLElement, math?: string): void {
-    console.log(element);
     if(math){
       element.innerHTML = math;
     }

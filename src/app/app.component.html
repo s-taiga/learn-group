@@ -1,3 +1,23 @@
+<p>作用させる要素</p>
+<input type="text" #affect_unit (keyup.enter)="onEnter(affect_unit.value)">
+
+<div id="buttons">
+  <mat-button-toggle-group #group="matButtonToggleGroup">
+    <mat-button-toggle checked value="left"
+      (click)="changeAffectDirection(group.value)">
+      aH
+    </mat-button-toggle>
+    <mat-button-toggle value="right"
+      (click)="changeAffectDirection(group.value)">
+      Ha
+    </mat-button-toggle>
+    <mat-button-toggle value="conjugate"
+      (click)="changeAffectDirection(group.value)">
+      aHa^-1
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
 <table>
   <tr>
     <td>変換前</td>
@@ -5,7 +25,7 @@
   </tr>
   <tr id="each_row"
     *ngFor="let each_row of this.service.all_list">
-    <td id="origin" [appDisplayMath]>{{each_row.origin | displayUnit}}</td>
-    <td id="affected" [appDisplayMath]>{{each_row.affected | displayUnit}}</td>
+    <td id="origin">{{each_row.origin | displayUnit}}</td>
+    <td id="affected">{{each_row.affected | displayUnit}}</td>
   </tr>
 </table>

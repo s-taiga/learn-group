@@ -8,23 +8,66 @@ export class CalcChangeService {
   // 変換対象のリスト（有限群）
   public all_list: ShowUnit[];
   // 入れ替える文字数
-  public size: number = 4;
+  public size: number = 3;
   // 作用
   public g: ChangeUnit;
+  // 作用する向き
+  private calcDirection: string = 'left';
 
   // リスト初期化
   constructor() {
     this.g = {size: this.size, pos: [...Array(this.size).keys()]};
-    this.all_list = this.make_all_list(this.size).map(v=>{return {origin: v, affected: this.calc(this.g, v)}});
+    this.all_list = this.make_all_list(this.size).map(v=>{return {origin: v, affected: this.calcMain(this.g, v)}});
+  }
+
+  public regenerate(new_g: number[]){
+    this.g.pos = new_g;
+    for(let i = 0; i < this.all_list.length; i++){
+      this.all_list[i].affected = this.calcMain(this.g, this.all_list[i].origin);
+    }
+  }
+
+  // 
+  public changeCalcDirection(value: string){
+    this.calcDirection = value;
+    for(let i = 0; i < this.all_list.length; i++){
+      this.all_list[i].affected = this.calcMain(this.g, this.all_list[i].origin);
+    }
+  }
+
+  // 置換計算ラッパー処理
+  // 左作用、右作用、共役計算を分ける
+  private calcMain(left: ChangeUnit, right: ChangeUnit): ChangeUnit{
+    switch (this.calcDirection) {
+      case 'left':
+        return this.calc(left, right);
+      case 'right':
+        return this.calc(right, left);
+      case 'conjugate':
+        return this.calc(left, this.calc(right, this.inverse(left)));
+      default:
+        break;
+    }
   }
 
   // 置換計算
   // 左からの作用を考えるので右にある置換先を左にある置換で入れ替えていく
   private calc(left: ChangeUnit, right: ChangeUnit): ChangeUnit{
-    for(let i = left.size; i < left.size; i++){
-      right.pos[right.pos.findIndex(v=>v==i)] = left.pos[i];
+    let return_unit: ChangeUnit = JSON.parse(JSON.stringify(right));
+    for(let i = 0; i < left.size; i++){
+      return_unit.pos[right.pos.findIndex(v=>v==i)] = left.pos[i];
     }
-    return right;
+    return return_unit;
+  }
+
+  // 逆置換計算
+  private inverse(unit: ChangeUnit): ChangeUnit{
+    let return_unit: ChangeUnit = {size: unit.size, pos:[]};
+
+    for (let index = 0; index < unit.size; index++) {
+      return_unit.pos.push(unit.pos.findIndex(v=>v==index));
+    }
+    return return_unit;
   }
 
   // リストを作成する

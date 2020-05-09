@@ -8,7 +8,7 @@ export class DisplayUnitPipe implements PipeTransform {
 
   transform(value: ChangeUnit): string {
     let base: boolean[] = Array(value.size).fill(true);
-    let base_return: string = '$';
+    let base_return: string = '';
     let idx: number = 0;
     // 全ての要素を走査し終わるまで
     while(base.reduce((pre, cur)=>pre||cur, false) && idx < value.size){
@@ -23,7 +23,7 @@ export class DisplayUnitPipe implements PipeTransform {
           while(value.pos[idx] != current_idx){
             idx = value.pos[idx];
             base[idx] = false;
-            base_return += `\\: ${idx+1}`;
+            base_return += ` ${idx+1}`;
           }
           base_return += ')';
           idx = current_idx;
@@ -31,9 +31,9 @@ export class DisplayUnitPipe implements PipeTransform {
       }
       idx++;
     }
-    base_return += '$';
+    base_return += '';
     // 何も追加されない時は恒等置換なのでeを返す
-    return base_return.length == 2 ? '$e$' : base_return;
+    return base_return.length == 0 ? 'e' : base_return;
   }
 
 }
