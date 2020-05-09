@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ChangeUnit, ShowUnit } from './change.class'
-
+/**
+ * 置換作成・計算関係まとめサービス
+ * Util的な処理と状態保持が混じった形になっているが大して大きいクラスでも無いのでこれでよしとする
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +23,7 @@ export class CalcChangeService {
     this.all_list = this.make_all_list(this.size).map(v=>{return {origin: v, affected: this.calcMain(this.g, v)}});
   }
 
+  // リスト再計算
   public regenerate(new_g: number[]){
     this.g.pos = new_g;
     for(let i = 0; i < this.all_list.length; i++){
@@ -27,7 +31,7 @@ export class CalcChangeService {
     }
   }
 
-  // 
+  // 作用の向きを変更し再計算
   public changeCalcDirection(value: string){
     this.calcDirection = value;
     for(let i = 0; i < this.all_list.length; i++){
@@ -60,7 +64,7 @@ export class CalcChangeService {
     return return_unit;
   }
 
-  // 逆置換計算
+  // 逆置換要素作成
   private inverse(unit: ChangeUnit): ChangeUnit{
     let return_unit: ChangeUnit = {size: unit.size, pos:[]};
 

@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observer, ReplaySubject, Observable } from 'rxjs';
-
+/**
+ * MathJax表示用サービス
+ * 動的な変更ができなかったのと妙に表示に時間がかかるのでひとまず使わないで放置
+ * このページを参考にしました
+ * https://stackoverflow.com/questions/55125544/mathjax-in-angular-6
+ */
 declare global {
   interface Window {
     hubReady: Observer<boolean>;

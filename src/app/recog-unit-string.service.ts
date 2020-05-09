@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-
+/**
+ * 置換表現を配列に変換
+ * display-unit.pipe.tsと真逆の処理
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -8,7 +11,7 @@ export class RecogUnitStringService {
   constructor() { }
 
   // 置換表現を配列に変換する
-  // 本当なら文法チェックを行うべきだが、性善説にのっとりしない
+  // 本当なら文法チェックを行うべきだが、多分間違えないだろうとしてチェックしない
   // 最低限おかしい数字のみが来ている時のみ弾く
   reshapeUnitString(base_sentence: string, size: number): number[]{
     let return_array: number[] = [...Array(size).keys()];

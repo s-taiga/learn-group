@@ -1,25 +1,33 @@
+<!--
+  群論勉強用一括置換計算ページ
+-->
+
+<!-- 作用させる置換要素入力フォーム -->
 <mat-form-field >
   <mat-label>作用させる要素</mat-label>
   <input matInput #affect_unit (keyup.enter)="onEnter(affect_unit.value)">
 </mat-form-field>
 
+<!-- 左作用・右作用・共役作用選択ボタン -->
 <div id="buttons">
   <mat-button-toggle-group #group="matButtonToggleGroup">
     <mat-button-toggle checked value="left"
       (click)="changeAffectDirection(group.value)">
-      aH
+      <span class="select_affect_button">aH</span>
     </mat-button-toggle>
     <mat-button-toggle value="right"
       (click)="changeAffectDirection(group.value)">
-      Ha
+      <span class="select_affect_button">Ha</span>
     </mat-button-toggle>
     <mat-button-toggle value="conjugate"
       (click)="changeAffectDirection(group.value)">
-      aHa^-1
+      <!-- 上付き文字を用いると高さが変わってしまったのでスタイル直指定 -->
+      <span class="select_affect_button" style="line-height: 39px;">aHa<sup>-1</sup></span>
     </mat-button-toggle>
   </mat-button-toggle-group>
 </div>
 
+<!-- 作用結果一覧 -->
 <mat-table [dataSource]="service.all_list">
   <ng-container matColumnDef="origin">
     <mat-header-cell *matHeaderCellDef>変換前</mat-header-cell>

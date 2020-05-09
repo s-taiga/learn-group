@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CalcChangeService } from './calc-change.service';
 import { RecogUnitStringService } from './recog-unit-string.service';
-
+/**
+ * メイン表示用スクリプト
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,10 +17,13 @@ export class AppComponent {
               public recogUnit: RecogUnitStringService){
   }
 
+  // 置換文字列入力処理
+  // エンターキーを叩いたときに計算・画面反映させる
   onEnter(value: string){
     this.service.regenerate(this.recogUnit.reshapeUnitString(value, this.service.size));
   }
 
+  // 作用の向きボタン
   changeAffectDirection(value: string){
     this.service.changeCalcDirection(value);
   }

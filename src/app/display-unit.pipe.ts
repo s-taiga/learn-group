@@ -1,6 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ChangeUnit } from './change.class';
-
+/**
+ * 置換の配列表現を一般的な置換表現に変換
+ * recog-unit-string.service.tsと真逆
+ * 表示するときだけ必要な処理なのでパイプで実装
+ */
 @Pipe({
   name: 'displayUnit'
 })
