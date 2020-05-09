@@ -27,6 +27,19 @@
   </mat-button-toggle-group>
 </div>
 
+<!-- 置換のサイズ変更ドロップダウン -->
+<div id="size_change">
+  <mat-form-field>
+    <mat-label>サイズ</mat-label>
+    <mat-select matInput #unit_size
+      (selectionChange)="changeUnitSize(unit_size.value)">
+      <mat-option value=3>3</mat-option>
+      <mat-option value=4>4</mat-option>
+      <mat-option value=5>5</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
 <!-- 作用結果一覧 -->
 <mat-table [dataSource]="service.all_list">
   <ng-container matColumnDef="origin">

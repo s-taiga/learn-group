@@ -39,6 +39,13 @@ export class CalcChangeService {
     }
   }
 
+  // 置換のサイズ変更及び再計算
+  public changeUnitSize(new_size: number){
+    this.size = Number(new_size);
+    this.g = {size: this.size, pos: [...Array(this.size).keys()]};
+    this.all_list = this.make_all_list(this.size).map(v=>{return {origin: v, affected: this.calcMain(this.g, v)}});
+  }
+
   // 置換計算ラッパー処理
   // 左作用、右作用、共役計算を分ける
   private calcMain(left: ChangeUnit, right: ChangeUnit): ChangeUnit{

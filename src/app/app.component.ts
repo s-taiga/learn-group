@@ -27,4 +27,9 @@ export class AppComponent {
   changeAffectDirection(value: string){
     this.service.changeCalcDirection(value);
   }
+
+  // 置換のサイズ変更
+  changeUnitSize(value: number){
+    this.service.changeUnitSize(value);
+  }
 }
