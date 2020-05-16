@@ -1,0 +1,8 @@
+<mat-form-field >
+    <mat-label>左の要素</mat-label>
+    <input matInput #left_unit (keyup.enter)="calc(left_unit.value, right_unit.value)">
+</mat-form-field>
+<mat-form-field >
+    <mat-label>右の要素</mat-label>
+    <input matInput #right_unit (keyup.enter)="calc(left_unit.value, right_unit.value)">
+</mat-form-field>

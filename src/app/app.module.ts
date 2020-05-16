@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule, MatTable } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,12 +16,16 @@ import { DisplayMathDirective } from './display-math.directive';
 import { MathModule } from './math/math.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalcAllComponent } from './calc-all/calc-all.component';
+import { CalcEachComponent } from './calc-each/calc-each.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DisplayUnitPipe,
-    DisplayMathDirective
+    DisplayMathDirective,
+    CalcAllComponent,
+    CalcEachComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +38,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTabsModule
   ],
   providers: [DisplayUnitPipe],
   bootstrap: [AppComponent]

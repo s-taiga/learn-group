@@ -41,8 +41,10 @@ export class RecogUnitStringService {
         return_array[ref_array.findIndex(v=>v==each_unit[i-1])] = each_unit[i];
       }
       return_array[ref_array.findIndex(v=>v==each_unit[each_unit.length-1])] = each_unit[0];
-  }
+    }
 
     return return_array;
   }
+
+  
 }
