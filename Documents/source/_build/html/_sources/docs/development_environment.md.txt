@@ -2,9 +2,7 @@
 *************
 
 # 開発環境作成
-
 ## 環境構築手順
-
 1. （任意）VSCodeのインストール
 
 https://qiita.com/psychoroid/items/7d85ae6bade4a67aedb1
