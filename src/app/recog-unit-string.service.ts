@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ChangeUnit } from './change.class';
 /**
  * 置換表現を配列に変換
  * display-unit.pipe.tsと真逆の処理
@@ -13,7 +14,7 @@ export class RecogUnitStringService {
   // 置換表現を配列に変換する
   // 本当なら文法チェックを行うべきだが、多分間違えないだろうとしてチェックしない
   // 最低限おかしい数字のみが来ている時のみ弾く
-  reshapeUnitString(base_sentence: string, size: number): number[]{
+  static reshapeUnitString(base_sentence: string, size: number): number[]{
     let return_array: number[] = [...Array(size).keys()];
 
     // 受け取った文字列がeだった場合には恒等置換なのでreturn_arrayをそのまま返す
@@ -46,5 +47,34 @@ export class RecogUnitStringService {
     return return_array;
   }
 
+  static unit2string(unit: ChangeUnit): string{
+    let base: boolean[] = Array(unit.size).fill(true);
+    let base_return: string = '';
+    let idx: number = 0;
+    // 全ての要素を走査し終わるまで
+    while(base.reduce((pre, cur)=>pre||cur, false) && idx < unit.size){
+      // もうすでに追加済みであるかどうか
+      if(base[idx]){
+        base[idx] = false;
+        // 変換位置が同じ（移動しない）時でない場合
+        if(unit.pos[idx] != idx){
+          base_return += `(${idx+1}`;
+          let current_idx: number = idx;
+          // もとの添え字に戻るまで変換先をたどる
+          while(unit.pos[idx] != current_idx){
+            idx = unit.pos[idx];
+            base[idx] = false;
+            base_return += ` ${idx+1}`;
+          }
+          base_return += ')';
+          idx = current_idx;
+        }
+      }
+      idx++;
+    }
+    base_return += '';
+    // 何も追加されない時は恒等置換なのでeを返す
+    return base_return.length == 0 ? 'e' : base_return;
+  }
   
 }

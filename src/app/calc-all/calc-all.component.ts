@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CalcChangeService } from '../calc-change.service';
 import { RecogUnitStringService } from '../recog-unit-string.service';
+import { ThreeEngineService } from '../three-engine.service';
 
 @Component({
   selector: 'app-calc-all',
@@ -8,19 +9,23 @@ import { RecogUnitStringService } from '../recog-unit-string.service';
   styleUrls: ['./calc-all.component.css']
 })
 export class CalcAllComponent implements OnInit {
+  @ViewChild('rendererCanvas', {static: true})
+  public rendererCanvas: ElementRef<HTMLCanvasElement>;
 
   ngOnInit(): void {
+    this.engServ.createScene(this.rendererCanvas);
+    this.engServ.animate();
   }
   displayedColumns = ['origin', 'affected'];
 
   constructor(public service: CalcChangeService,
-              public recogUnit: RecogUnitStringService){
+              private engServ: ThreeEngineService){
   }
 
   // 置換文字列入力処理
   // エンターキーを叩いたときに計算・画面反映させる
   onEnter(value: string){
-    this.service.regenerate(this.recogUnit.reshapeUnitString(value, this.service.size));
+    this.service.regenerate(RecogUnitStringService.reshapeUnitString(value, this.service.size));
   }
 
   // 作用の向きボタン
