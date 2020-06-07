@@ -36,5 +36,6 @@ export class CalcAllComponent implements OnInit {
   // 置換のサイズ変更
   changeUnitSize(value: number){
     this.service.changeUnitSize(value);
+    this.engServ.recreateMeshes();
   }
 }

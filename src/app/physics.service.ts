@@ -30,7 +30,8 @@ export class PhysicsService {
     if (this.coord == null) {
       this.coord = tf.variable(tf.tensor(new_coord));
     } else {
-      this.coord.assign(tf.tensor(new_coord));
+      this.coord.dispose();
+      this.coord = tf.variable(tf.tensor(new_coord));
     }
   }
 
@@ -38,7 +39,8 @@ export class PhysicsService {
     if (this.veloc == null){
       this.veloc = tf.variable(tf.tensor(new_velocity));
     } else {
-      this.veloc.assign(tf.tensor(new_velocity));
+      this.veloc.dispose();
+      this.veloc = tf.variable(tf.tensor(new_velocity));
     }
   }
 
@@ -46,10 +48,8 @@ export class PhysicsService {
     if (this.movable == null){
       this.movable = tf.variable(tf.tensor(new_coef).as2D(1, -1).tile([new_coef.length, 1]));
     } else {
-      this.movable.assign(tf.variable(tf.tensor(new_coef).as2D(1, -1).tile([new_coef.length, 1])));
-    }
-    if( this.attractive_coefficient && this.relation_coefficient){
-      this.setForceCoefficient();
+      this.movable.dispose();
+      this.movable = tf.variable(tf.tensor(new_coef).as2D(1, -1).tile([new_coef.length, 1]));
     }
   }
 
@@ -57,10 +57,8 @@ export class PhysicsService {
     if (this.attractive_coefficient == null){
       this.attractive_coefficient = tf.variable(tf.tensor(new_coef));
     } else {
-      this.attractive_coefficient.assign(tf.tensor(new_coef));
-    }
-    if (this.relation_coefficient && this.movable){
-      this.setForceCoefficient();
+      this.attractive_coefficient.dispose();
+      this.attractive_coefficient = tf.variable(tf.tensor(new_coef));
     }
   }
 
@@ -68,10 +66,8 @@ export class PhysicsService {
     if (this.relation_coefficient == null){
       this.relation_coefficient = tf.variable(tf.tensor(new_coef));
     } else {
-      this.relation_coefficient.assign(tf.tensor(new_coef));
-    }
-    if (this.attractive_coefficient && this.movable){
-      this.setForceCoefficient();
+      this.relation_coefficient.dispose();
+      this.relation_coefficient = tf.variable(tf.tensor(new_coef));
     }
   }
 
@@ -83,7 +79,8 @@ export class PhysicsService {
       if (this.force_coefficient == null){
         this.force_coefficient = tf.variable(temp_tensor);
       } else {
-        this.force_coefficient.assign(temp_tensor);
+        this.force_coefficient.dispose();
+        this.force_coefficient = tf.variable(temp_tensor);
       }
     });
   }

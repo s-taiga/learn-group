@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ChangeUnit, ShowUnit } from './change.class'
+import { ChangeUnit, ShowUnit, HistoryUnit } from './change.class'
 /**
  * 置換作成・計算関係まとめサービス
  * Util的な処理と状態保持が混じった形になっているが大して大きいクラスでも無いのでこれでよしとする
@@ -16,6 +16,8 @@ export class CalcChangeService {
   public g: ChangeUnit;
   // 作用する向き
   private calcDirection: string = 'left';
+  // 計算履歴
+  public history: HistoryUnit[] = [];
 
   // リスト初期化
   constructor() {
@@ -26,16 +28,29 @@ export class CalcChangeService {
   // リスト再計算
   public regenerate(new_g: number[]){
     this.g.pos = new_g;
-    for(let i = 0; i < this.all_list.length; i++){
-      this.all_list[i].affected = this.calcMain(this.g, this.all_list[i].origin);
-    }
+    this.calcAllUnit();
   }
 
   // 作用の向きを変更し再計算
   public changeCalcDirection(value: string){
     this.calcDirection = value;
+    this.calcAllUnit();
+  }
+
+  // リスト再計算
+  private calcAllUnit(): void{
     for(let i = 0; i < this.all_list.length; i++){
       this.all_list[i].affected = this.calcMain(this.g, this.all_list[i].origin);
+    }
+    // まだ履歴に登録済みでない場合は履歴に追加していく
+    if(this.history.findIndex(v=>JSON.stringify(v.affect_unit)===JSON.stringify(this.g)) == -1){
+      let new_history: HistoryUnit = {affect_unit:{size: this.g.size, pos: [].concat(this.g.pos)},
+                                      is_show: true, pointer2affected_index:[]};
+      for(let i = 0; i < this.all_list.length; i++){
+        new_history.pointer2affected_index[i] = this.all_list.findIndex(
+          v=>JSON.stringify(v.affected)===JSON.stringify(this.all_list[i].origin));
+      }
+      this.history.push(new_history);
     }
   }
 
@@ -44,6 +59,8 @@ export class CalcChangeService {
     this.size = Number(new_size);
     this.g = {size: this.size, pos: [...Array(this.size).keys()]};
     this.all_list = this.make_all_list(this.size).map(v=>{return {origin: v, affected: this.calcMain(this.g, v)}});
+    // 履歴もクリアしてしまう
+    this.history.length = 0;
   }
 
   // 置換計算ラッパー処理

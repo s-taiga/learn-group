@@ -38,12 +38,13 @@ export class ThreeEngineService {
   private relationCoef: number[][];
   private movableCoef: number[];
   private fontloader: THREE.FontLoader;
+  private font: THREE.Font;
   private clickedMesh: THREE.Mesh;
   private arrow: THREE.ArrowHelper[];
 
   private frameId: number = null;
 
-  private fontSize: 0.8;
+  private floatingFontSize: 0.5;
 
   public constructor(private ngZone: NgZone, 
                      private physics: PhysicsService,
@@ -106,6 +107,7 @@ export class ThreeEngineService {
 
     this.fontloader = new THREE.FontLoader();
     this.fontloader.load('http://localhost:4200/assets/helvetiker_regular.typeface.json', font => {
+      this.font = font;
       this.createTextMesh(font);
 
       this.physics.setCoord(this.coord);
@@ -122,6 +124,7 @@ export class ThreeEngineService {
       this.physics.setAttractiveCoefficient(this.attractiveCoef);
       this.physics.setRelationCoefficient(this.relationCoef);
       this.physics.setMovable(this.movableCoef);
+      this.physics.setForceCoefficient();
 
       this.physics.calc();
   
@@ -155,12 +158,50 @@ export class ThreeEngineService {
 
   }
 
+  recreateMeshes(): void{
+    for(let i=0; i < this.textMeshes.length; i++){
+      this.scene.remove(this.textMeshes[i]);
+      this.textGeometry[i].dispose();
+      this.selectedBoxesGeometry[i].dispose();
+    }
+    this.textMeshes.length = 0;
+    this.textMesh.length = 0;
+    this.selectedMesh.length = 0;
+    this.textGeometry.length = 0;
+    this.selectedBoxesGeometry.length = 0;
+
+    this.coord = [[0, 0, 0]];
+    this.velocity = [];
+    this.relationCoef = [];
+
+    this.createTextMesh(this.font);
+
+    this.physics.setCoord(this.coord);
+    this.attractiveCoef = new Array(this.coord.length).fill(1);
+    this.attractiveCoef[0] = -1;
+    this.movableCoef = new Array(this.coord.length).fill(1);
+    this.movableCoef[0] = 0;
+    for (const _ of this.coord) {
+      this.relationCoef.push(new Array(this.coord.length).fill(0));
+      this.velocity.push(new Array(3).fill(0));
+    }
+
+    this.physics.setVelocity(this.velocity);
+    this.physics.setAttractiveCoefficient(this.attractiveCoef);
+    this.physics.setRelationCoefficient(this.relationCoef);
+    this.physics.setMovable(this.movableCoef);
+    this.physics.setForceCoefficient();
+
+    this.physics.calc();
+
+  }
+
   private createTextMesh(font: THREE.Font): void{
     for (let i = 0; i < this.service.all_list.length; i++) {
       const disp_string = RecogUnitStringService.unit2string(this.service.all_list[i].origin);
       this.textGeometry.push(new THREE.TextGeometry(disp_string, {
         font: font,
-        size: this.fontSize,
+        size: 0.8,
         height: 0,
         curveSegments: 12
       }));
