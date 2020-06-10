@@ -3,7 +3,8 @@
 -->
 
 <!-- 作用させる置換要素入力フォーム -->
-<mat-form-field >
+<div style="position: absolute">
+  <mat-form-field >
     <mat-label>作用させる要素</mat-label>
     <input matInput #affect_unit (keyup.enter)="onEnter(affect_unit.value)">
   </mat-form-field>
@@ -56,8 +57,7 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+</div>
 
-  <div class="engine-wrapper">
-    <canvas #rendererCanvas></canvas>
-  </div>
+<canvas #rendererCanvas style="position: absolute"></canvas>
   

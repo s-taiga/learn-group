@@ -29,7 +29,7 @@ export class ThreeEngineService {
   private selectedMesh: THREE.Mesh[];
   private textMeshes: THREE.Group[];
   private textGeometry: THREE.TextGeometry[];
-  private textMaterial: THREE.MeshStandardMaterial[];
+  private textMaterial: THREE.MeshStandardMaterial[][];
   private selectedBoxesGeometry: THREE.BoxGeometry[];
   private selectedBoxesMaterial: THREE.MeshPhongMaterial;
   private coord: number[][];
@@ -86,10 +86,8 @@ export class ThreeEngineService {
     const gridHelper = new THREE.GridHelper(20, 10, 0xdddddd, 0xdddddd);
     this.scene.add(gridHelper);
 
-    this.textMaterial = [
-      new THREE.MeshStandardMaterial({ color: 0x000000 }),
-      new THREE.MeshStandardMaterial({ color: 0x000000 })
-    ];
+    this.textMaterial = [];
+
     this.selectedBoxesMaterial =  new THREE.MeshPhongMaterial( {
       color: 0x00ffff, 
       opacity: 0, 
@@ -128,7 +126,7 @@ export class ThreeEngineService {
 
       this.physics.calc();
   
-  });
+    });
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
@@ -163,12 +161,15 @@ export class ThreeEngineService {
       this.scene.remove(this.textMeshes[i]);
       this.textGeometry[i].dispose();
       this.selectedBoxesGeometry[i].dispose();
+      this.textMaterial[i][0].dispose();
+      this.textMaterial[i][1].dispose();
     }
     this.textMeshes.length = 0;
     this.textMesh.length = 0;
     this.selectedMesh.length = 0;
     this.textGeometry.length = 0;
     this.selectedBoxesGeometry.length = 0;
+    this.textMaterial.length = 0;
 
     this.coord = [[0, 0, 0]];
     this.velocity = [];
@@ -206,7 +207,12 @@ export class ThreeEngineService {
         curveSegments: 12
       }));
 
-      this.textMesh.push(new THREE.Mesh(this.textGeometry[i], this.textMaterial));
+      this.textMaterial.push([
+        new THREE.MeshStandardMaterial({ color: 0x000000 }),
+        new THREE.MeshStandardMaterial({ color: 0x000000 })  
+      ]);
+
+      this.textMesh.push(new THREE.Mesh(this.textGeometry[i], this.textMaterial[i]));
       this.textMeshes.push(new THREE.Group());
       this.textMeshes[i].add(this.textMesh[i]);
 

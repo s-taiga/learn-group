@@ -19,7 +19,7 @@ export class CalcAllComponent implements OnInit {
   displayedColumns = ['origin', 'affected'];
 
   constructor(public service: CalcChangeService,
-              private engServ: ThreeEngineService){
+              public engServ: ThreeEngineService){
   }
 
   // 置換文字列入力処理
