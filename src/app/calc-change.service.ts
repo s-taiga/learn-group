@@ -43,9 +43,9 @@ export class CalcChangeService {
       this.all_list[i].affected = this.calcMain(this.g, this.all_list[i].origin);
     }
     // まだ履歴に登録済みでない場合は履歴に追加していく
-    if(this.history.findIndex(v=>JSON.stringify(v.affect_unit)===JSON.stringify(this.g)) == -1){
+    if(this.history.findIndex(v=>JSON.stringify(v.affect_unit)===JSON.stringify(this.g) && v.affect_direction == this.calcDirection) == -1){
       let new_history: HistoryUnit = {affect_unit:{size: this.g.size, pos: [].concat(this.g.pos)},
-                                      is_show: true, pointer2affected_index:[]};
+                                      affect_direction: this.calcDirection, is_show: true, pointer2affected_index:[]};
       for(let i = 0; i < this.all_list.length; i++){
         new_history.pointer2affected_index[i] = this.all_list.findIndex(
           v=>JSON.stringify(v.affected)===JSON.stringify(this.all_list[i].origin));

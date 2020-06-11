@@ -40,7 +40,7 @@ export class ThreeEngineService {
   private fontloader: THREE.FontLoader;
   private font: THREE.Font;
   private clickedMesh: THREE.Mesh;
-  private arrow: THREE.ArrowHelper[];
+  private arrow: THREE.ArrowHelper[][];
 
   private frameId: number = null;
 
@@ -102,6 +102,7 @@ export class ThreeEngineService {
     this.selectedMesh = [];
     this.textGeometry = [];
     this.selectedBoxesGeometry = [];
+    this.arrow = [];
 
     this.fontloader = new THREE.FontLoader();
     this.fontloader.load('http://localhost:4200/assets/helvetiker_regular.typeface.json', font => {
@@ -243,6 +244,29 @@ export class ThreeEngineService {
     }
   }
 
+  genarateArrow(): void{
+    let box = new THREE.Box3();
+    let from_arrow = new THREE.Vector3();
+    let to_arrow = new THREE.Vector3();
+    const history_idx = this.service.history.length - 1;
+    this.arrow.push([]);
+    const arrow_idx = this.arrow.length - 1;
+
+    for(let i=0; i<this.service.all_list.length; i++){
+      box.setFromObject(this.textMeshes[i]).getCenter(from_arrow);
+      box.setFromObject(this.textMeshes[this.service.history[history_idx].pointer2affected_index[i]]).getCenter(to_arrow);
+      
+      const direction_arrow = to_arrow.clone().sub(from_arrow);
+      // Vector3.normalize()は正規化したベクトルを返しつつ、自身を正規化してしまうので長さを先に保持しておく必要がある
+      const direction_length = direction_arrow.length();
+      this.arrow[arrow_idx].push(
+        new THREE.ArrowHelper(direction_arrow.normalize(), from_arrow, direction_length, 0x000000, 1, 0.5)
+      );
+      this.scene.add(this.arrow[arrow_idx][i]);
+    }
+    console.log("arrow generate");
+  }
+
   private normalAngle(camera_pos: THREE.Vector3, char_pos: THREE.Vector3): number{
     let tmpV = new THREE.Vector3();
     tmpV.copy(camera_pos);
@@ -293,6 +317,25 @@ export class ThreeEngineService {
         this.textMeshes[index-1].position.x = arr[index][0];
         this.textMeshes[index-1].position.y = arr[index][1];
         this.textMeshes[index-1].position.z = arr[index][2];        
+      }
+
+      let box = new THREE.Box3();
+      let from_arrow = new THREE.Vector3();
+      let to_arrow = new THREE.Vector3();
+      
+      for(let j=0; j<this.arrow.length; j++){
+        for(let i=0; i<this.service.all_list.length; i++){
+          box.setFromObject(this.textMeshes[i]).getCenter(from_arrow);
+          box.setFromObject(this.textMeshes[this.service.history[j].pointer2affected_index[i]]).getCenter(to_arrow);
+          
+          this.arrow[j][i].position.set(from_arrow.x, from_arrow.y, from_arrow.z);
+          const direction_arrow = to_arrow.clone().sub(from_arrow);
+          // Vector3.normalize()は正規化したベクトルを返しつつ、自身を正規化してしまうので長さを先に保持しておく必要がある
+          const direction_length = direction_arrow.length();
+          this.arrow[j][i].setDirection(direction_arrow.normalize());
+          this.arrow[j][i].setLength(direction_length);
+          // this.arrow[j][i].line.material[0].opacity = 0;
+        }
       }
     });
 

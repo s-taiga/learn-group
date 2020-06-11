@@ -10,6 +10,7 @@ export interface ShowUnit{
 
 export interface HistoryUnit{
     affect_unit: ChangeUnit;
+    affect_direction: string;
     is_show: Boolean;
     pointer2affected_index: number[];
 }

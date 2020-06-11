@@ -26,11 +26,13 @@ export class CalcAllComponent implements OnInit {
   // エンターキーを叩いたときに計算・画面反映させる
   onEnter(value: string){
     this.service.regenerate(RecogUnitStringService.reshapeUnitString(value, this.service.size));
+    this.engServ.genarateArrow();
   }
 
   // 作用の向きボタン
   changeAffectDirection(value: string){
     this.service.changeCalcDirection(value);
+    this.engServ.genarateArrow();
   }
 
   // 置換のサイズ変更
