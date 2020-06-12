@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule, MatTable } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,7 +40,8 @@ import { CalcEachComponent } from './calc-each/calc-each.component';
     MatInputModule,
     MatTableModule,
     MatSelectModule,
-    MatTabsModule
+    MatTabsModule,
+    DragDropModule
   ],
   providers: [DisplayUnitPipe],
   bootstrap: [AppComponent]

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ChangeUnit, ShowUnit, HistoryUnit } from './change.class'
+import { ChangeUnit, ShowUnit, HistoryUnit } from './change.class';
+import { RecogUnitStringService } from './recog-unit-string.service';
+
 /**
  * 置換作成・計算関係まとめサービス
  * Util的な処理と状態保持が混じった形になっているが大して大きいクラスでも無いのでこれでよしとする
@@ -45,10 +47,9 @@ export class CalcChangeService {
     // まだ履歴に登録済みでない場合は履歴に追加していく
     if(this.history.findIndex(v=>JSON.stringify(v.affect_unit)===JSON.stringify(this.g) && v.affect_direction == this.calcDirection) == -1){
       let new_history: HistoryUnit = {affect_unit:{size: this.g.size, pos: [].concat(this.g.pos)},
-                                      affect_direction: this.calcDirection, is_show: true, pointer2affected_index:[]};
+                                      affect_direction: this.calcDirection, is_show: true, pointer2affected_string:[]};
       for(let i = 0; i < this.all_list.length; i++){
-        new_history.pointer2affected_index[i] = this.all_list.findIndex(
-          v=>JSON.stringify(v.affected)===JSON.stringify(this.all_list[i].origin));
+        new_history.pointer2affected_string[i] = this.all_list[i].affected;
       }
       this.history.push(new_history);
     }

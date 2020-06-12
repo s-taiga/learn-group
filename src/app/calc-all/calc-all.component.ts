@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CalcChangeService } from '../calc-change.service';
 import { RecogUnitStringService } from '../recog-unit-string.service';
 import { ThreeEngineService } from '../three-engine.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ChangeUnit } from '../change.class';
+import { MatTable } from '@angular/material/table';
 
 @Component({
   selector: 'app-calc-all',
@@ -11,6 +14,8 @@ import { ThreeEngineService } from '../three-engine.service';
 export class CalcAllComponent implements OnInit {
   @ViewChild('rendererCanvas', {static: true})
   public rendererCanvas: ElementRef<HTMLCanvasElement>;
+
+  @ViewChild('calc_result') table: MatTable<ChangeUnit[]>;
 
   ngOnInit(): void {
     this.engServ.createScene(this.rendererCanvas);
@@ -39,5 +44,15 @@ export class CalcAllComponent implements OnInit {
   changeUnitSize(value: number){
     this.service.changeUnitSize(value);
     this.engServ.recreateMeshes();
+  }
+
+  // テーブル要素移動
+  dropTable(event: CdkDragDrop<ChangeUnit[]>){
+    const prevIndex = this.service.all_list.findIndex(d=>d===event.item.data);
+    moveItemInArray(this.service.all_list, prevIndex, event.currentIndex);
+    for(let i=0; i<this.service.history.length; i++){
+      moveItemInArray(this.service.history[i].pointer2affected_string, prevIndex, event.currentIndex);
+    }
+    this.table.renderRows();
   }
 }

@@ -43,6 +43,7 @@ export class ThreeEngineService {
   private arrow: THREE.ArrowHelper[][];
 
   private frameId: number = null;
+  public meshOrder: Object = {};
 
   private floatingFontSize: 0.5;
 
@@ -208,6 +209,8 @@ export class ThreeEngineService {
         curveSegments: 12
       }));
 
+      this.meshOrder[disp_string] = i;
+
       this.textMaterial.push([
         new THREE.MeshStandardMaterial({ color: 0x000000 }),
         new THREE.MeshStandardMaterial({ color: 0x000000 })  
@@ -252,9 +255,10 @@ export class ThreeEngineService {
     this.arrow.push([]);
     const arrow_idx = this.arrow.length - 1;
 
+    console.log(this.service.history[history_idx].pointer2affected_string);
     for(let i=0; i<this.service.all_list.length; i++){
-      box.setFromObject(this.textMeshes[i]).getCenter(from_arrow);
-      box.setFromObject(this.textMeshes[this.service.history[history_idx].pointer2affected_index[i]]).getCenter(to_arrow);
+      box.setFromObject(this.textMeshes[this.meshOrder[RecogUnitStringService.unit2string(this.service.all_list[i].origin)]]).getCenter(from_arrow);
+      box.setFromObject(this.textMeshes[this.meshOrder[RecogUnitStringService.unit2string(this.service.history[history_idx].pointer2affected_string[i])]]).getCenter(to_arrow);
       
       const direction_arrow = to_arrow.clone().sub(from_arrow);
       // Vector3.normalize()は正規化したベクトルを返しつつ、自身を正規化してしまうので長さを先に保持しておく必要がある
@@ -325,8 +329,8 @@ export class ThreeEngineService {
       
       for(let j=0; j<this.arrow.length; j++){
         for(let i=0; i<this.service.all_list.length; i++){
-          box.setFromObject(this.textMeshes[i]).getCenter(from_arrow);
-          box.setFromObject(this.textMeshes[this.service.history[j].pointer2affected_index[i]]).getCenter(to_arrow);
+          box.setFromObject(this.textMeshes[this.meshOrder[RecogUnitStringService.unit2string(this.service.all_list[i].origin)]]).getCenter(from_arrow);
+          box.setFromObject(this.textMeshes[this.meshOrder[RecogUnitStringService.unit2string(this.service.history[j].pointer2affected_string[i])]]).getCenter(to_arrow);
           
           this.arrow[j][i].position.set(from_arrow.x, from_arrow.y, from_arrow.z);
           const direction_arrow = to_arrow.clone().sub(from_arrow);

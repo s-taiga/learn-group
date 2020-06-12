@@ -44,7 +44,11 @@
   <!-- 履歴制御ボタン（予定） -->
   
   <!-- 作用結果一覧 -->
-  <mat-table [dataSource]="service.all_list">
+  <mat-table #calc_result [dataSource]="service.all_list"
+  cdkDropList
+  [cdkDropListData]="service.all_list"
+  (cdkDropListDropped)="dropTable($event)"
+  style="opacity: 0.6;">
     <ng-container matColumnDef="origin">
       <mat-header-cell *matHeaderCellDef>変換前</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element.origin | displayUnit}}</mat-cell>
@@ -55,7 +59,7 @@
     </ng-container>
   
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></mat-row>
   </mat-table>
 </div>
 
