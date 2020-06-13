@@ -19,6 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalcAllComponent } from './calc-all/calc-all.component';
 import { CalcEachComponent } from './calc-each/calc-each.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { CalcEachComponent } from './calc-each/calc-each.component';
     MatTableModule,
     MatSelectModule,
     MatTabsModule,
-    DragDropModule
+    DragDropModule,
+    MatCheckboxModule
   ],
   providers: [DisplayUnitPipe],
   bootstrap: [AppComponent]

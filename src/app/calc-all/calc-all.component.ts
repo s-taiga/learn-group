@@ -40,6 +40,11 @@ export class CalcAllComponent implements OnInit {
     this.engServ.genarateArrow();
   }
 
+  // 履歴制御ボタン
+  OnChangeHistDisp(){
+    this.engServ.setArrowOpacity();
+  }
+
   // 置換のサイズ変更
   changeUnitSize(value: number){
     this.service.changeUnitSize(value);

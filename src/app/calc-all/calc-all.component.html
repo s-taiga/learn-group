@@ -42,6 +42,11 @@
   </div>
 
   <!-- 履歴制御ボタン（予定） -->
+  <div id="history_button">
+    <ng-container *ngFor="let hist of service.history">
+      <mat-checkbox (change)="OnChangeHistDisp()" [(ngModel)]="hist.is_show">{{hist.affect_unit | displayUnit}}</mat-checkbox>
+    </ng-container>
+  </div>
   
   <!-- 作用結果一覧 -->
   <mat-table #calc_result [dataSource]="service.all_list"

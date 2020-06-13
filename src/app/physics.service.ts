@@ -96,11 +96,11 @@ export class PhysicsService {
       // 各座標のそれぞれから距離
       const disctances = tiled_coord.sub(tiled_coord.transpose([1, 0, 2]));
       // 力の計算のベース、引力について位置が同じになったときに発散とかするとまずいのでそれっぽい処理に変換
-      const force_base = tf.mul(disctances.square().sum(2).sqrt(), this.force_coefficient).mul(this.movable);
+      const force_base = tf.mul(disctances.square().sum(2).sqrt(), this.force_coefficient);
       //force_base.print();
       // 力計算
-      const force = force_base.mul(-0.1).exp().mul(force_base).mul(0.1).add(0.2)
-        .as3D(disctances.shape[0], disctances.shape[1], 1).tile([1, 1, 3]);
+      const force = tf.sign(force_base).add(1).div(2).div(tf.relu(force_base).add(0.01)).sub(tf.sign(force_base).sub(1).mul(force_base)).add(0.5)
+        .mul(this.movable).as3D(disctances.shape[0], disctances.shape[1], 1).tile([1, 1, 3]);
       //force.print();
       // 加速度
       const each_force = disctances.mul(force).sum(0).sub(this.veloc.mul(this.decay_rate)).mul(this.dt);

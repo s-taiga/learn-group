@@ -255,7 +255,6 @@ export class ThreeEngineService {
     this.arrow.push([]);
     const arrow_idx = this.arrow.length - 1;
 
-    console.log(this.service.history[history_idx].pointer2affected_string);
     for(let i=0; i<this.service.all_list.length; i++){
       box.setFromObject(this.textMeshes[this.meshOrder[RecogUnitStringService.unit2string(this.service.all_list[i].origin)]]).getCenter(from_arrow);
       box.setFromObject(this.textMeshes[this.meshOrder[RecogUnitStringService.unit2string(this.service.history[history_idx].pointer2affected_string[i])]]).getCenter(to_arrow);
@@ -268,7 +267,6 @@ export class ThreeEngineService {
       );
       this.scene.add(this.arrow[arrow_idx][i]);
     }
-    console.log("arrow generate");
   }
 
   private normalAngle(camera_pos: THREE.Vector3, char_pos: THREE.Vector3): number{
@@ -338,12 +336,23 @@ export class ThreeEngineService {
           const direction_length = direction_arrow.length();
           this.arrow[j][i].setDirection(direction_arrow.normalize());
           this.arrow[j][i].setLength(direction_length);
-          // this.arrow[j][i].line.material[0].opacity = 0;
         }
       }
     });
 
     this.renderer.render(this.scene, this.camera);
+  }
+
+  setArrowOpacity(): void{
+    for(let j=0; j<this.arrow.length; j++){
+      for(let i=0; i<this.service.all_list.length; i++){
+        // 表示するかどうかの変数を見て透過度を変更
+        (this.arrow[j][i].line.material as THREE.LineBasicMaterial).opacity = this.service.history[j].is_show ? 1 : 0;
+        (this.arrow[j][i].cone.material as THREE.LineBasicMaterial).opacity = this.service.history[j].is_show ? 1 : 0;
+        (this.arrow[j][i].line.material as THREE.LineBasicMaterial).transparent = true;
+        (this.arrow[j][i].cone.material as THREE.LineBasicMaterial).transparent = true;
+      }
+    }
   }
 
   resize() {
